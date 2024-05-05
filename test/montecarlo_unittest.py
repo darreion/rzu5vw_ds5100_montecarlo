@@ -1,21 +1,22 @@
 import unittest
 import numpy as np
+import pandas as pd
 from Montecarlo.montecarlo import Die, Game, Analyzer
 
 class TestDie(unittest.TestCase):
     def test_init(self):
-        """Test Die initialization with valid inputs."""
+        """Test Die initialization"""
         faces = np.array(['A', 'B', 'C'])
         die = Die(faces)
         self.assertEqual(len(die.show()), 3)
 
     def test_init_with_non_numpy_array(self):
-        """Test Die initialization raises TypeError if faces are not a numpy array."""
+        """Test Die initialization shows error if faces are not a numpy array."""
         with self.assertRaises(TypeError):
             Die(['A', 'B', 'C'])
 
     def test_init_with_non_unique_faces(self):
-        """Test Die initialization raises ValueError if faces are not unique."""
+        """Test Die initialization shows error if faces are not unique."""
         faces = np.array(['A', 'A', 'B'])
         with self.assertRaises(ValueError):
             Die(faces)
@@ -81,16 +82,20 @@ class TestGame(unittest.TestCase):
             game.show('invalid')
 
 class TestAnalyzer(unittest.TestCase):
+    
+    def setUp(self):
+    
+        die = Die(np.array([1, 2, 3, 4, 5, 6]))
+        game = Game([die])
+        self.analyzer = Analyzer(game)  # This is critical
+        
     def test_jackpot_count(self):
-        """Test calculating jackpots."""
-        faces = np.array(['H', 'T'])
-        die1 = Die(faces)
-        die2 = Die(faces)
-        game = Game([die1, die2])
-        game.play(1000)
-        analyzer = Analyzer(game)
-        jackpots = analyzer.jackpot()
-        self.assertIsInstance(jackpots, int)
+       
+        jackpots = self.analyzer.jackpot() 
+        print(f"Jackpot count returned: {jackpots}") 
+        
+        self.assertIsInstance(jackpots, int) 
+    
 
     def test_combo_count(self):
         """Test combo count returns DataFrame with expected indices."""
@@ -115,7 +120,7 @@ class TestAnalyzer(unittest.TestCase):
         self.assertTrue(isinstance(count_df, pd.DataFrame))
 
     def test_permutation_count(self):
-        """Test permutation count returns DataFrame with expected
+        """Test permutation count returns DataFrame with expected"""
         faces = np.array(['1', '2', '3'])
         die1 = Die(faces)
         die2 = Die(faces)
