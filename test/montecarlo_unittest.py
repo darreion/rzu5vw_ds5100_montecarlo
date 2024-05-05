@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from your_module import Die, Game, Analyzer  # Adjust import as per your module setup
+from Montecarlo.montecarlo import Die, Game, Analyzer
 
 class TestDie(unittest.TestCase):
     def test_init(self):
@@ -116,3 +116,14 @@ class TestAnalyzer(unittest.TestCase):
 
     def test_permutation_count(self):
         """Test permutation count returns DataFrame with expected
+        faces = np.array(['1', '2', '3'])
+        die1 = Die(faces)
+        die2 = Die(faces)
+        game = Game([die1, die2])
+        game.play(100)
+        analyzer = Analyzer(game)
+        perm_df = analyzer.permutation_count()
+        self.assertTrue(isinstance(perm_df, pd.DataFrame))
+
+if __name__ == '__main__':
+    unittest.main()
